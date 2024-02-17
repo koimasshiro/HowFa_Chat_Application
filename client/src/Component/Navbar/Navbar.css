@@ -1,0 +1,30 @@
+.navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    margin: 0 150px 10px 150px;
+}
+.nav-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-list ul{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    font-size: 15px;
+    padding-right: 80px;
+}
+.nav-list ul li{
+    padding: 10px;
+}
+.social-icons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
