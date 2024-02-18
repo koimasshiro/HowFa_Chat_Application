@@ -20,6 +20,7 @@ const ConversationBox = ({
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+
   const scroll = useRef();
 
   useEffect(() => {

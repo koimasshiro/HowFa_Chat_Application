@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../Actions/AuthAction";
+import axios from "axios";
 
 const SideBar = () => {
   const { user } = useSelector((state) => state.AuthReducer.authData);
@@ -38,6 +39,19 @@ const SideBar = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
+
+
+  const [keyword, setKeyword] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`user?search=${keyword}`);
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error('Error searching users:', error);
+        }
+    };
 
   return (
     <div>
@@ -57,6 +71,7 @@ const SideBar = () => {
               <BsSearch onClick={onOpen} />
             </a>
           </button>
+          
           <li>
             <a href=" " data-title="Notifications">
               <MdOutlineNotifications />
@@ -122,14 +137,21 @@ const SideBar = () => {
                   type="search"
                   className="content-sidebar-input"
                   placeholder="Search..."
+                  value={keyword} onChange={(e) => setKeyword(e.target.value)}
                 />
                 <div className="content-sidebar-submit">
-                  <Button>
+                  <Button onClick={handleSearch}>
                     <BsSearch />
                   </Button>
                 </div>
+
               </form>
               {/* <ChatLoading/> */}
+              <ul>
+                {searchResults.map((user) => (
+                    <li key={user._id}>{user.name}</li>
+                ))}
+            </ul>
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>

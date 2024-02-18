@@ -4,7 +4,7 @@
   "description": "A MERN Chat Application",
   "main": "server.js",
   "scripts": {
-    "start": "react-scripts start"
+    "start": "nodemon Server/server.js"
   },
   "author": "Imhariagbe Eseosa Immaculate",
   "license": "ISC",

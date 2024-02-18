@@ -85,17 +85,52 @@ const deleteUser = async(req, res)=>{
 //get all users
 
 const getAllUsers = async(req, res)=>{
+    // try {
+    //     let users = await UserModel.find();
+    //     users = users.map((user)=>{
+    //         const {password, ...otherDetails} = user._doc
+    //         return otherDetails;
+    //     });
+    //     res.status(200).json(users)
+    // }
+    // catch (error) {
+    //     res.status(500).json(error)
+    // }
+
     try {
-        let users = await UserModel.find();
-        users = users.map((user)=>{
-            const {password, ...otherDetails} = user._doc
-            return otherDetails;
-        });
-        res.status(200).json(users)
-    }
-    catch (error) {
-        res.status(500).json(error)
+        // Fetch all users from the database
+        const users = await UserModel.find();
+
+        // Check if there are no users found
+        if (!users || users.length === 0) {
+            return res.status(404).json({ message: 'No users found' });
+        }
+
+        // Return the users as a JSON response
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 }
 
-module.exports = {getAllUsers, getUser, updateUser, deleteUser}
+// Search users
+const searchUsers = async (req, res) => {
+    try {
+        const { keyword } = req.query;
+        const regex = new RegExp(keyword, 'i');
+        const users = await UserModel.find({
+            $or: [
+                { name: { $regex: regex } },
+                { email: { $regex: regex } }
+            ]
+        }).select('-password'); // Exclude password from the response
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+module.exports = {getAllUsers, getUser, updateUser, deleteUser, searchUsers}

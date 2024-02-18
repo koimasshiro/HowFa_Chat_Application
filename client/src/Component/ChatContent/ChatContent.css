@@ -98,6 +98,9 @@
     cursor: pointer;
     /* color: white; */
 }
+.message:hover{
+    background-color: #ccc;
+}
 .content-message-title {
     margin-left: 16px;
     margin-right: 16px;
@@ -142,12 +145,12 @@
 }
 .content-message-info {
     display: grid;
-    margin-right: 12px;
+    margin-right: 13px;
     width: 100%;
 }
 .content-message-name {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     margin-bottom: 2px;
 }

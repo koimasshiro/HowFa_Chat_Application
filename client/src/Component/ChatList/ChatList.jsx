@@ -3,7 +3,7 @@ import "./ChatList.css";
 import '../tailwindcolorscss/tailwindColors.css'
 import { getUser } from "../../api/UserRequest";
 
-const ChatList = ({ data, currUserId, online }) => {
+const ChatList = ({ data, currUserId, online}) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -20,6 +20,8 @@ const ChatList = ({ data, currUserId, online }) => {
     getUserData();
   }, []);
 
+
+  
   return (
     <>
     <div key={userData?._id}>
@@ -29,17 +31,18 @@ const ChatList = ({ data, currUserId, online }) => {
           {online && <span className="content-message-online"></span>}
           <span className="content-message-info">
             <span className="content-message-name">{userData?.name}</span>
-            <span className="content-message-text">
-              Lorem ipsum dolor sit amet consectetur.
-            </span>
+            {/* <span className="content-message-text">
+              lorem ipsom dolor sit amet...
+            </span> */}
           </span>
           <span className="content-message-more">
-            <span className="content-message-unread">5</span>
-            <span className="content-message-time">12:30</span>
+            {/* <span className="content-message-unread">5</span> */}
+            <span className="content-message-time"style={{marginLeft: "80px"}}>12:30</span>
           </span>
         </a>
       </li>
     </div>
+    
     </>
   );
 };

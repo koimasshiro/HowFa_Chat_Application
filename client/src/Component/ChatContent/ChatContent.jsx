@@ -3,9 +3,11 @@ import "./ChatContent.css";
 import "../tailwindcolorscss/tailwindColors.css";
 import ConversationBox from "../ConversationBox/ConversationBox";
 import { useSelector } from "react-redux";
-import { userChats } from "../../api/ChatRequest";
+import { userChats, createChat } from "../../api/ChatRequest";
 import ChatList from "../ChatList/ChatList";
 import { io } from "socket.io-client";
+
+import AllUsers from "../DisplayAllUsers/AllUsers";
 
 const ChatContent = () => {
   const { user } = useSelector((state) => state.AuthReducer.authData);
@@ -15,6 +17,8 @@ const ChatContent = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [sendMessage, setSendMessage] = useState(null);
   const [receiveMessage, setReceiveMessage] = useState(null);
+  // const [chatMessages, setChatMessages] = useState([]);
+
 
   const socket = useRef();
 
@@ -45,6 +49,8 @@ const ChatContent = () => {
       try {
         const { data } = await userChats(user._id);
         setChats(data);
+        console.log(chats)
+
       } catch (error) {
         console.log(error);
       }
@@ -56,6 +62,33 @@ const ChatContent = () => {
     const chatMember = chat.members.find((member) => member !== user._id);
     const online = onlineUsers.find((user) => user.userId === chatMember);
     return online ? true : false;
+  };
+
+  // Function to handle setting current chat
+  // const handleChatClick = (chat) => {
+  //   setCurrChat(chat);
+  // };
+
+
+  // Function to handle setting current chat or creating a new chat
+  const handleChatClick = async (clickedUserId) => {
+    // Check if a chat already exists with the clicked user
+    const existingChat = chats.find(chat =>
+      chat.members.includes(clickedUserId._id) && chat.members.includes(user._id)
+    );
+      console.log(clickedUserId._id)
+    if (existingChat) {
+      // Set existing chat as the current chat
+      setCurrChat(existingChat);
+    } else {
+      // Create a new chat with the clicked user
+      try {
+        const newChatData = await createChat(user._id, clickedUserId._id);
+        setCurrChat(newChatData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -79,6 +112,12 @@ const ChatContent = () => {
                   </div>
                 ))}
               </ul>
+              {/* Pass handleChatClick as prop to AllUsers */}
+              <AllUsers
+                currUserId={user._id}
+                // online={checkOnlineStatus(chat)}
+                handleChatClick={handleChatClick} // Pass the callback function
+              />
             </div>
           </>
 
